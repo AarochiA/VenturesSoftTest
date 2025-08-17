@@ -4,7 +4,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
-
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, FlexLayoutModule, MatSidenavModule, MatToolbarModule],

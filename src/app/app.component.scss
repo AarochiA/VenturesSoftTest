@@ -1,27 +1,6 @@
-
-.app-container {
-  height: 100vh;
-}
-
-.app-sidenav {
-  width: 220px;
-  background: #f5f5f5;
-  padding: 1rem;
-}
-
-.app-header {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
 .app-content {
-  padding: 1rem;
-  min-height: calc(100vh - 128px);
-  /* 64px header + 64px footer (ajusta según altura de tus toolbars) */
-}
-
-.app-footer {
-  position: sticky;
-  bottom: 0;
+  min-height: 100%;
+  display: block;
+  padding: 60px 1rem;
+  background-color: rgba(207, 223, 241, 0.897);
 }
