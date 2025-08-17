@@ -11,7 +11,8 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "format": "prettier --write \"src/**/*.{ts,html,scss,css,json,md}\"",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "e2e": "npx cypress open"
   },
   "prettier": {
     "overrides": [
@@ -42,6 +43,7 @@
     "@angular/compiler-cli": "^20.1.0",
     "@types/jest": "^30.0.0",
     "angular-eslint": "20.1.1",
+    "cypress": "^14.5.4",
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
