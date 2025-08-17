@@ -34,6 +34,9 @@
     "@angular/material": "^20.1.6",
     "@angular/platform-browser": "^20.1.0",
     "@angular/router": "^20.1.0",
+    "@ngrx/effects": "^20.0.0",
+    "@ngrx/store": "^20.0.0",
+    "@ngrx/store-devtools": "^20.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -41,6 +44,7 @@
     "@angular/build": "^20.1.1",
     "@angular/cli": "^20.1.1",
     "@angular/compiler-cli": "^20.1.0",
+    "@ngrx/eslint-plugin": "^20.0.0",
     "@types/jest": "^30.0.0",
     "angular-eslint": "20.1.1",
     "cypress": "^14.5.4",
