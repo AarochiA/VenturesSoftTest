@@ -7,16 +7,22 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-footer',
-  imports: [MatToolbar, MatSelectModule, MatFormFieldModule, FormsModule, TranslateModule],
+  imports: [
+    MatToolbar,
+    MatSelectModule,
+    MatFormFieldModule,
+    FormsModule,
+    TranslateModule,
+  ],
   templateUrl: './footer.component.html',
-  styleUrl: './footer.component.scss'
+  styleUrl: './footer.component.scss',
 })
 export class FooterComponent {
   selectedLang = 'es';
   showFlagOptions = input<boolean>(false);
   translate = inject(TranslateService);
 
-  constructor(){
+  constructor() {
     this.translate.use(this.selectedLang);
   }
 

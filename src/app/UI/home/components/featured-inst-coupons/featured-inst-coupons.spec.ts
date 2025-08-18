@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FooterComponent } from './footer.component';
+import { FeaturedInstCoupons } from './featured-inst-coupons';
 
-describe('FooterComponent', () => {
-  let component: FooterComponent;
-  let fixture: ComponentFixture<FooterComponent>;
+describe('FeaturedInstCoupons', () => {
+  let component: FeaturedInstCoupons;
+  let fixture: ComponentFixture<FeaturedInstCoupons>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FooterComponent],
+      imports: [FeaturedInstCoupons],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(FooterComponent);
+    fixture = TestBed.createComponent(FeaturedInstCoupons);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

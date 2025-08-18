@@ -3,17 +3,19 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { HeaderComponent } from "./UI/shared/header.component/header.component";
-import { FooterComponent } from "./UI/shared/footer.component/footer.component";
+import { HeaderComponent } from './UI/shared/header.component/header.component';
+import { FooterComponent } from './UI/shared/footer.component/footer.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,
+  imports: [
+    RouterOutlet,
     FlexLayoutModule,
     MatSidenavModule,
     MatToolbarModule,
     HeaderComponent,
-    FooterComponent],
+    FooterComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

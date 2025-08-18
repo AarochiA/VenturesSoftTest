@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   selector: 'app-header',
   imports: [MatToolbar, MatButtonModule],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
   showFlagOptions = input<boolean>(false);
@@ -19,5 +19,5 @@ export class HeaderComponent {
   logout = () => {
     this.authservice.logout();
     this.router.navigate(['login']);
-  }
+  };
 }

@@ -33,10 +33,10 @@ export const appConfig: ApplicationConfig = {
       traceLimit: 25,
     }),
     provideTranslateService({
-      loader: provideTranslateHttpLoader({ prefix: "/i18n/" }),
+      loader: provideTranslateHttpLoader({ prefix: '/i18n/' }),
       fallbackLang: 'en',
-      lang: 'es'
-    })
+      lang: 'es',
+    }),
 
     // Configuracion para el depliegue en servidores por Ej. Netlify o Amplify
     // para que no se pierda la aplicacion al hacer refresh en el Navegador.
