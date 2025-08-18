@@ -1,0 +1,21 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: rgba(207, 223, 241, 0.897);
+}
+
+.footer-text {
+  flex: 1;
+  text-align: left;
+}
+
+.footer-spacer {
+  flex: 1;
+}
+
+.footer-form {
+  min-width: 150px;
+}

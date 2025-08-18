@@ -1,0 +1,14 @@
+@if(showFlagOptions()){
+<mat-toolbar color="accent" class="footer">
+  <span class="footer-text">{{ 'RIGTHS' | translate }}</span>
+
+  <span class="footer-spacer"></span>
+  <mat-form-field appearance="outline" class="footer-form">
+    <mat-label>{{ 'LANG' | translate }}</mat-label>
+    <mat-select [(value)]="selectedLang" (selectionChange)="changeLang($event.value)">
+      <mat-option value="es">Español</mat-option>
+      <mat-option value="en">Ingles</mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-toolbar>
+}

@@ -9,6 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AuthService } from '../../../../infraestructure/helpers/services/auth.service';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../../../infraestructure/store/auth/auth.actions';
 import { DialogElements } from '../../../shared/dialog-elements/dialog-elements';
 
 @Component({
@@ -35,6 +37,8 @@ export class LoginComponent {
   authService = inject(AuthService);
   fb = inject(FormBuilder);
   router = inject(Router);
+  store = inject(Store);
+
   constructor() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -44,18 +48,12 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      this.authService
-        .login(this.loginForm.value.email!, this.loginForm.value.password!)
-        .subscribe({
-          next: () => this.router.navigate(['/home']),
-          error: (err) =>
-            this.dialog.open(DialogElements, {
-              data: {
-                title: 'Error login',
-                descripcion: err,
-              },
-            }),
-        });
+      this.store.dispatch(
+        AuthActions.login({
+          email: this.loginForm.value.email!,
+          password: this.loginForm.value.password!,
+        }),
+      );
     }
   }
 }
