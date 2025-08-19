@@ -1,5 +1,5 @@
+import { provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { FeaturedInstCoupons } from './featured-inst-coupons';
 
 describe('FeaturedInstCoupons', () => {
@@ -9,6 +9,7 @@ describe('FeaturedInstCoupons', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [FeaturedInstCoupons],
+      providers: [provideZonelessChangeDetection()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FeaturedInstCoupons);

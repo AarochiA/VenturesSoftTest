@@ -18,7 +18,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   styleUrl: './footer.component.scss',
 })
 export class FooterComponent {
-  selectedLang = 'es';
+  selectedLang = 'en';
   showFlagOptions = input<boolean>(false);
   translate = inject(TranslateService);
 

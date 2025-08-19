@@ -1,5 +1,5 @@
+import { provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { UnlockFullPower } from './unlock-full-power';
 
 describe('UnlockFullPower', () => {
@@ -9,6 +9,7 @@ describe('UnlockFullPower', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [UnlockFullPower],
+      providers: [provideZonelessChangeDetection()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(UnlockFullPower);
