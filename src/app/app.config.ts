@@ -13,9 +13,12 @@ import { provideHttpClient } from '@angular/common/http';
 import { authReducer } from './infraestructure/store/auth/auth.reducer';
 import { AuthEffects } from './infraestructure/store/auth/auth.effects';
 import { provideTranslateService } from '@ngx-translate/core';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CategoriesGateway } from './domain/gateways/categories-gateway';
 import { ListCategoriesApiService } from './infraestructure/driven-adapters/listCategories.api.service';
+import { BrandsGateway } from './domain/gateways/brands-gateway';
+import { ListBrandsApiService } from './infraestructure/driven-adapters/listBrands.api.service';
 // import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
@@ -24,6 +27,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes),
     provideHttpClient(),
+    provideAnimations(),
     provideStore({ auth: authReducer }),
     provideEffects([AuthEffects]),
     provideStoreDevtools({
@@ -38,6 +42,7 @@ export const appConfig: ApplicationConfig = {
       lang: 'en',
     }),
     { provide: CategoriesGateway, useClass: ListCategoriesApiService },
+    { provide: BrandsGateway, useClass: ListBrandsApiService },
 
     // Configuracion para el depliegue en servidores por Ej. Netlify o Amplify
     // para que no se pierda la aplicacion al hacer refresh en el Navegador.
