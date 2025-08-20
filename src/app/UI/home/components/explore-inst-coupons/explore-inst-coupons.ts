@@ -4,11 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { CategoriesUseCases } from '../../../../domain/usecases/categoriesApi-use-case';
-import { catchError, finalize, map, of, tap } from 'rxjs';
-import {
-  CategoriesModel,
-  MenuItemCat,
-} from '../../../../domain/models/categories.model';
+import { catchError, map, of } from 'rxjs';
+import { CategoriesModel, MenuItemCat } from '../../../../domain/models/categories.model';
 
 @Component({
   selector: 'app-explore-inst-coupons',
@@ -17,42 +14,19 @@ import {
   styleUrl: './explore-inst-coupons.scss',
 })
 export class ExploreInstCoupons {
-  list_Categories!: CategoriesModel;
 
   selected: string[] = [];
-  groupedCategories: MenuItemCat[][] = [];
 
-  _categoriesUseCases = inject(CategoriesUseCases);
-
-  constructor() {
-    this._categoriesUseCases
-      .getListCategories()
-      .pipe(
-        map((response: CategoriesModel) => response ?? []),
-        tap((response) => {
-          this.list_Categories = response;
-          this.groupedCategories = this.chunkArray(response.menuItems ?? [], 6);
-        }),
-        catchError((error) => {
-          console.log(
-            error.message ?? 'Error al cargar la lista de categorias',
-          );
-          return of([]);
-        }),
-        finalize(() => {}),
-      )
-      .subscribe();
-  }
-
-  setActive(descripcion: string) {
-    const index = this.selected.indexOf(descripcion);
-
-    if (index === -1) {
-      this.selected.push(descripcion);
-    } else {
-      this.selected.splice(index, 1);
-    }
-  }
+  categories$ = inject(CategoriesUseCases).getListCategories().pipe(
+    map((response) => {
+      const list_Categories = response as CategoriesModel;
+      return this.chunkArray(list_Categories.menuItems || [], 6);
+    }),
+    catchError((error) => {
+      console.error('Error cargando lista de categorías', error);
+      return of([]);
+    })
+  );
 
   private chunkArray(array: MenuItemCat[], size: number): MenuItemCat[][] {
     const result: MenuItemCat[][] = [];
@@ -61,4 +35,14 @@ export class ExploreInstCoupons {
     }
     return result;
   }
+
+  setActive(descripcion: string) {
+    const index = this.selected.indexOf(descripcion);
+    if (index === -1) {
+      this.selected.push(descripcion);
+    } else {
+      this.selected.splice(index, 1);
+    }
+  }
+
 }

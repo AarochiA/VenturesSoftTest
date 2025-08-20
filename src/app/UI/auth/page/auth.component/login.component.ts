@@ -11,7 +11,6 @@ import { AuthService } from '../../../../infraestructure/helpers/services/auth.s
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as AuthActions from '../../../../infraestructure/store/auth/auth.actions';
-import { DialogElements } from '../../../shared/dialog-elements/dialog-elements';
 
 @Component({
   selector: 'app-auth.component',
