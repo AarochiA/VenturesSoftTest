@@ -5,7 +5,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { CategoriesUseCases } from '../../../../domain/usecases/categoriesApi-use-case';
 import { catchError, map, of } from 'rxjs';
-import { CategoriesModel, MenuItemCat } from '../../../../domain/models/categories.model';
+import {
+  CategoriesModel,
+  MenuItemCat,
+} from '../../../../domain/models/categories.model';
 
 @Component({
   selector: 'app-explore-inst-coupons',
@@ -14,19 +17,20 @@ import { CategoriesModel, MenuItemCat } from '../../../../domain/models/categori
   styleUrl: './explore-inst-coupons.scss',
 })
 export class ExploreInstCoupons {
-
   selected: string[] = [];
 
-  categories$ = inject(CategoriesUseCases).getListCategories().pipe(
-    map((response) => {
-      const list_Categories = response as CategoriesModel;
-      return this.chunkArray(list_Categories.menuItems || [], 6);
-    }),
-    catchError((error) => {
-      console.error('Error cargando lista de categorías', error);
-      return of([]);
-    })
-  );
+  categories$ = inject(CategoriesUseCases)
+    .getListCategories()
+    .pipe(
+      map((response) => {
+        const list_Categories = response as CategoriesModel;
+        return this.chunkArray(list_Categories.menuItems || [], 6);
+      }),
+      catchError((error) => {
+        console.error('Error cargando lista de categorías: ', error);
+        return of([]);
+      }),
+    );
 
   private chunkArray(array: MenuItemCat[], size: number): MenuItemCat[][] {
     const result: MenuItemCat[][] = [];
@@ -44,5 +48,4 @@ export class ExploreInstCoupons {
       this.selected.splice(index, 1);
     }
   }
-
 }

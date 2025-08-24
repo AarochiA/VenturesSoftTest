@@ -1,24 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatCardModule } from '@angular/material/card';
-import { MatButton } from  '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import {
   trigger,
   transition,
   style,
   animate,
-  keyframes} from '@angular/animations';
+  keyframes,
+} from '@angular/animations';
 import { BrandsModel } from '../../../../domain/models/brands.model';
-// import { BrandsUseCases  } from '../../../../domain/usecases/brandsApi-use-case';
+import { BrandsUseCases } from '../../../../domain/usecases/brandsApi-use-case';
+import { catchError, map, of } from 'rxjs';
 
 @Component({
   selector: 'app-unlock-full-power',
-  imports: [MatButton, MatCardModule, TranslateModule, CommonModule],
+  imports: [
+    MatButtonModule,
+    MatCardModule,
+    TranslateModule,
+    CommonModule,
+    MatIconModule,
+  ],
   templateUrl: './unlock-full-power.html',
   styleUrl: './unlock-full-power.scss',
-  animations:[
-      trigger('fadeIn', [
+  animations: [
+    trigger('fadeIn', [
       transition(':enter', [
         animate(
           '2s ease-in-out',
@@ -28,79 +37,50 @@ import { BrandsModel } from '../../../../domain/models/brands.model';
           ]),
         ),
       ]),
-    ])
-  ]
+    ]),
+  ],
 })
 export class UnlockFullPower {
-  pageSize = 4;
-  currentPage = 0;
+  currentPage = signal(0);
+  itemsPerPage = 4;
 
-  brands: BrandsModel[] = [
-    {
-      logoUrl: 'assets/logos/logo1.png',
-      brandImageUrl: 'assets/images/brand1.jpg',
-      name: 'Coca Cola',
-      title: 'Refrescos',
-      description: 'La marca de refrescos más famosa del mundo.'
-    },
-    {
-      logoUrl: 'assets/logos/logo2.png',
-      brandImageUrl: 'assets/images/brand2.jpg',
-      name: 'Nike',
-      title: 'Deportes',
-      description: 'Inspirando atletas con ropa y calzado deportivo.'
-    },
-    {
-      logoUrl: 'assets/logos/logo3.png',
-      brandImageUrl: 'assets/images/brand3.jpg',
-      name: 'Apple',
-      title: 'Tecnología',
-      description: 'Diseñando tecnología innovadora para todos.'
-    },
-    {
-      logoUrl: 'assets/logos/logo4.png',
-      brandImageUrl: 'assets/images/brand4.jpg',
-      name: 'Adidas',
-      title: 'Deportes',
-      description: 'Ropa y calzado para atletas en todo el mundo.'
-    },
-    {
-      logoUrl: 'assets/logos/logo5.png',
-      brandImageUrl: 'assets/images/brand5.jpg',
-      name: 'Samsung',
-      title: 'Tecnología',
-      description: 'Innovación en móviles y electrónica de consumo.'
-    },
-    {
-      logoUrl: 'assets/logos/logo4.png',
-      brandImageUrl: 'assets/images/brand4.jpg',
-      name: 'Adidas',
-      title: 'Deportes',
-      description: 'Ropa y calzado para atletas en todo el mundo.'
-    },
-    {
-      logoUrl: 'assets/logos/logo5.png',
-      brandImageUrl: 'assets/images/brand5.jpg',
-      name: 'Samsung',
-      title: 'Tecnología',
-      description: 'Innovación en móviles y electrónica de consumo.'
-    }
-  ];
+  private brandsUseCases = inject(BrandsUseCases);
 
-  pagedBrands() {
-    const start = this.currentPage * this.pageSize;
-    return this.brands.slice(start, start + this.pageSize);
-  }
+  brands$ = this.brandsUseCases.getListBrands('2100').pipe(
+    map((response) => response as BrandsModel),
+    catchError((error) => {
+      console.error('Error cargando lista de marcas: ', error);
+      return of({
+        error: true,
+        codigo: '500',
+        message: 'Error en la carga',
+        menuItems: [],
+      } as BrandsModel);
+    }),
+  );
 
-  nextPage() {
-    if ((this.currentPage + 1) * this.pageSize < this.brands.length) {
-      this.currentPage++;
-    }
-  }
+  getPagedBrands = computed(() => {
+    return (brands: BrandsModel | null) => {
+      if (!brands) return [];
+      const start = this.currentPage() * this.itemsPerPage;
+      return brands.menuItems.slice(start, start + this.itemsPerPage);
+    };
+  });
 
   prevPage() {
-    if (this.currentPage > 0) {
-      this.currentPage--;
+    if (this.currentPage() > 0) {
+      this.currentPage.update((p) => p - 1);
     }
+  }
+
+  nextPage(total: number) {
+    const maxPage = Math.ceil(total / this.itemsPerPage) - 1;
+    if (this.currentPage() < maxPage) {
+      this.currentPage.update((p) => p + 1);
+    }
+  }
+
+  getMaxPage(total: number): number {
+    return Math.ceil(total / this.itemsPerPage) - 1;
   }
 }

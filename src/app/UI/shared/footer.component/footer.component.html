@@ -9,8 +9,8 @@
         [(value)]="selectedLang"
         (selectionChange)="changeLang($event.value)"
       >
-        <mat-option value="es">Español</mat-option>
-        <mat-option value="en">Ingles</mat-option>
+        <mat-option value="es">{{ "SPANISH" | translate }}</mat-option>
+        <mat-option value="en">{{ "ENGLISH" | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
   </mat-toolbar>

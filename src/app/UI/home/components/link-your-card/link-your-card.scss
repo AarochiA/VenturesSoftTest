@@ -1,0 +1,53 @@
+.title-head {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 35px;
+  padding: 40px;
+  color: #00008b;
+}
+
+.button-panel {
+  text-align: center;
+  margin: 20px auto;
+}
+
+.lista-container {
+  max-width: 700px;
+  margin: auto;
+}
+
+.headers {
+  display: grid;
+  grid-template-columns: 1fr 180px 140px;
+  align-items: center;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.header-option {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.item-container {
+  display: grid;
+  grid-template-columns: 1fr 150px 120px;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.radio-row {
+  display: contents;
+}
+
+.radio-col {
+  justify-self: center;
+}
+
+mat-radio-button {
+  justify-self: right;
+}
+
+.labelOptions {
+  font-size: 20px;
+  text-align: left;
+}

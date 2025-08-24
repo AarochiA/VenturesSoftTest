@@ -4,5 +4,15 @@
   "ETITLEHEAD":"Explora cupones instantáneos",
   "BTNLINKCARD":"VINCULA TU TARJETA",
   "TITLEUNLOCK":"Desbloquea todo el poder de",
-  "LOGOUT":"Cerrar Sesión "
+  "LOGOUT":"Cerrar Sesión ",
+  "LINKYOURCARD":"Vincula tu tarjeta de presentación para desbloquear ofertas de reembolso",
+  "INSTANT_COUPONS":"Cupones Instantáneos",
+  "FULL_ACCESS_EDGE":"Acceso completo a los beneficios Visa",
+  "CASHBACK_TRACKING":"Seguimiento de reembolsos",
+  "MERCHANT_SEARCH":"Búsqueda de ubicación de Comerciantes",
+  "CASHBACK_OFFERS":"Oferta de reembolso",
+  "NOCARDREQUIRED":"No es requerido vincular la tarjeta",
+  "LINKYOURCARDTOGET":"Vincula tu tarjeta para obtener",
+  "ENGLISH":"Ingles",
+  "SPANISH":"Español"
 }

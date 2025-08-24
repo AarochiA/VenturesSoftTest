@@ -1,49 +1,66 @@
 <div class="gradient-box" @fadeIn>
-  <div><br>
-    <h1 class="title-head">{{ 'TITLEUNLOCK' | translate }}</h1>
+  <div>
+    <h1 class="title-head">{{ "TITLEUNLOCK" | translate }}</h1>
   </div>
 
   <div class="carousel-container">
-    <button mat-mini-fab color="primary" (click)="prevPage()" [disabled]="currentPage === 0">
-      ‹
-    </button>
-
     <div class="cards-container">
-      @for (brand of pagedBrands(); track brand.name) {
-        <mat-card class="brand-card">
-          <mat-card-header>
-            <div mat-card-avatar>
-              <img [src]="brand.logoUrl" alt="Logo {{ brand.name }}" class="logo-img">
+      @if (brands$ | async; as list_Brands) {
+        <button
+          mat-mini-fab
+          color="primary"
+          class="btn-arrows"
+          (click)="prevPage()"
+          [disabled]="currentPage() === 0"
+        >
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+
+        @for (brand of getPagedBrands()(list_Brands); track $index) {
+          <mat-card class="brand-card">
+            <div class="image-container">
+              <img
+                id="imagen_marca"
+                [src]="brand.imagen"
+                [alt]="brand.nombreMarca"
+              />
+              <img
+                id="logo_angular"
+                src="assets/logo_angular.png"
+                alt="Logo Angular"
+              />
             </div>
-            <mat-card-title>{{ brand.name }}</mat-card-title>
-            <mat-card-subtitle>{{ brand.title }}</mat-card-subtitle>
-          </mat-card-header>
 
-          <img mat-card-image [src]="brand.brandImageUrl" alt="Imagen de {{ brand.name }}" />
+            <mat-card-content class="card-content">
+              <button matButton="tonal" class="cashback-btn">
+                <mat-icon>monetization_on</mat-icon> Cashback
+              </button>
+              <h2 class="brand-name">{{ brand.nombreMarca }}</h2>
+              <p class="brand-desc">{{ brand["descripción"] }}</p>
+            </mat-card-content>
+          </mat-card>
+        }
 
-          <mat-card-content>
-            <p>{{ brand.description }}</p>
-          </mat-card-content>
-
-          <mat-card-actions>
-            <button mat-button color="primary">Ver más</button>
-          </mat-card-actions>
-        </mat-card>
+        <button
+          mat-mini-fab
+          color="primary"
+          class="btn-arrows"
+          (click)="nextPage(list_Brands.menuItems.length)"
+          [disabled]="currentPage() >= getMaxPage(list_Brands.menuItems.length)"
+        >
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
       }
     </div>
-
-    <button mat-mini-fab color="primary" (click)="nextPage()" [disabled]="(currentPage + 1) * pageSize >= brands.length">
-      ›
-    </button>
   </div>
-  <br><br>
-  <br><br>
+  <br /><br />
   <div class="footer-btn">
-    <button matButton="filled">
-      {{ 'BTNLINKCARD' | translate }} &nbsp; &gt;
+    <button mat-flat-button color="accent">
+      {{ "BTNLINKCARD" | translate }} &nbsp; &gt;
     </button>
   </div>
 </div>
-<br><br><br>
-<br><br><br>
-<br><br><br>
+<br /><br />
+<br /><br />
+<br /><br />
+<br /><br />

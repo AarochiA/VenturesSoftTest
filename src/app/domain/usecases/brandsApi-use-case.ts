@@ -9,7 +9,7 @@ import { BrandsModel } from '../models/brands.model';
 export class BrandsUseCases {
   _brandsGateway = inject(BrandsGateway);
 
-  getListCategories(): Observable<BrandsModel> {
-    return this._brandsGateway,this.getListCategories();
+  getListBrands(idMenu: string): Observable<BrandsModel> {
+    return this._brandsGateway.getListBrands(idMenu);
   }
 }

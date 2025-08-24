@@ -13,7 +13,9 @@ export class ListBrandsApiService extends BrandsGateway {
 
   httpClient = inject(HttpClient);
 
-  override getListBrands(): Observable<BrandsModel | any> {
-    return this.httpClient.get(`${this.api_Test_Ventures_url}/Categorias/`);
+  override getListBrands(idMenu: string): Observable<BrandsModel> {
+    return this.httpClient.get<BrandsModel>(
+      `${this.api_Test_Ventures_url}/Marcas?idMenu=${idMenu}`,
+    );
   }
 }

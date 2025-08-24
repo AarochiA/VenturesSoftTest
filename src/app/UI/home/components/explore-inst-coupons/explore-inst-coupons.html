@@ -6,9 +6,11 @@
     @for (group of groupedCategories; track $index) {
       <div class="button-container">
         @for (item of group; track item.idMenu) {
-          <button mat-raised-button
-                  [ngClass]="{ active: selected.includes(item['descripción']) }"
-                  (click)="setActive(item['descripción'])">
+          <button
+            mat-raised-button
+            [ngClass]="{ active: selected.includes(item['descripción']) }"
+            (click)="setActive(item['descripción'])"
+          >
             {{ item["descripción"] }}
           </button>
         }
@@ -19,3 +21,4 @@
     <p>Cargando categorías...</p>
   }
 </div>
+<br /><br />

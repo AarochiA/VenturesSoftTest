@@ -1,1 +1,38 @@
-<p>link-your-card works!</p>
+<div class="button-panel">
+  <h1 class="title-head">{{ "LINKYOURCARD" | translate }}</h1>
+  <div class="lista-container">
+    <div class="headers">
+      <span></span>
+      <h2 class="header-option">{{ "NOCARDREQUIRED" | translate }}</h2>
+      <h2 class="header-option">{{ "LINKYOURCARDTOGET" | translate }}</h2>
+    </div>
+
+    <mat-list>
+      <mat-list-item *ngFor="let item of items; let i = index">
+        <div class="item-container">
+          <span class="labelOptions">{{ item.nombre | translate }}</span>
+
+          <mat-radio-group
+            [(ngModel)]="item.respuesta"
+            aria-label="Selecciona opción"
+            class="radio-row"
+          >
+            <mat-radio-button class="radio-col" value="no"></mat-radio-button>
+            <mat-radio-button class="radio-col" value="si"></mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </mat-list-item>
+    </mat-list>
+    <br /><br /><br />
+
+    <div class="btn-sendResp">
+      <!-- <button mat-raised-button color="primary" (click)="guardarRespuestas()">
+      Guardar respuestas
+    </button> -->
+      <button matButton="filled" class="thin-btn">
+        {{ "BTNLINKCARD" | translate }} &nbsp; &gt;
+      </button>
+    </div>
+  </div>
+</div>
+<br /><br /><br />
