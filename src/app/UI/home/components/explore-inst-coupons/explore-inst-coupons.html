@@ -8,8 +8,8 @@
         @for (item of group; track item.idMenu) {
           <button
             mat-raised-button
-            [ngClass]="{ active: selected.includes(item['descripción']) }"
-            (click)="setActive(item['descripción'])"
+            [ngClass]="{ active: selected().includes(item.idMenu.toString()) }"
+            (click)="setActive(item.idMenu, item['descripción'])"
           >
             {{ item["descripción"] }}
           </button>

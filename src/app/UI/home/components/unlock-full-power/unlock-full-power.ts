@@ -13,7 +13,9 @@ import {
 } from '@angular/animations';
 import { BrandsModel } from '../../../../domain/models/brands.model';
 import { BrandsUseCases } from '../../../../domain/usecases/brandsApi-use-case';
-import { catchError, map, of } from 'rxjs';
+import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
+import { CategoriesUseCases } from '../../../../domain/usecases/categoriesApi-use-case';
+import { MenuItemCat } from '../../../../domain/models/categories.model';
 
 @Component({
   selector: 'app-unlock-full-power',
@@ -45,25 +47,47 @@ export class UnlockFullPower {
   itemsPerPage = 4;
 
   private brandsUseCases = inject(BrandsUseCases);
+  private categoriesUseCases = inject(CategoriesUseCases);
 
-  brands$ = this.brandsUseCases.getListBrands('2100').pipe(
-    map((response) => response as BrandsModel),
+  categories$ = this.categoriesUseCases.getListCategories().pipe(
+    map((response) => response.menuItems as MenuItemCat[]),
     catchError((error) => {
-      console.error('Error cargando lista de marcas: ', error);
-      return of({
-        error: true,
-        codigo: '500',
-        message: 'Error en la carga',
-        menuItems: [],
-      } as BrandsModel);
+      console.error('Error cargando lista de categorías: ', error);
+      return of([] as MenuItemCat[]);
+    }),
+  );
+
+  brands$ = this.categories$.pipe(
+    switchMap((categories) => {
+      if (!categories || categories.length === 0) return of([]);
+      const requests = categories.map((cat) =>
+        this.brandsUseCases.getListBrands(cat.idMenu.toString()).pipe(
+          map((response) => {
+            const list_Resp_Marcas = response as BrandsModel;
+            const firstBrand = list_Resp_Marcas.menuItems[0] ?? null;
+            return {
+              categoria: cat,
+              brand: firstBrand,
+            };
+          }),
+          catchError((error) => {
+            console.error(
+              `Error cargando marcas de categoría ${cat.idMenu}: `,
+              error,
+            );
+            return of({ categoria: cat, brand: null });
+          }),
+        ),
+      );
+      return forkJoin(requests);
     }),
   );
 
   getPagedBrands = computed(() => {
-    return (brands: BrandsModel | null) => {
-      if (!brands) return [];
+    return (data: { categoria: MenuItemCat; brand: any | null }[] | null) => {
+      if (!data) return [];
       const start = this.currentPage() * this.itemsPerPage;
-      return brands.menuItems.slice(start, start + this.itemsPerPage);
+      return data.slice(start, start + this.itemsPerPage);
     };
   });
 

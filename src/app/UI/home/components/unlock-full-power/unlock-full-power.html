@@ -21,8 +21,8 @@
             <div class="image-container">
               <img
                 id="imagen_marca"
-                [src]="brand.imagen"
-                [alt]="brand.nombreMarca"
+                [src]="brand.brand.imagen"
+                [alt]="brand.categoria['descripción']"
               />
               <img
                 id="logo_angular"
@@ -35,8 +35,10 @@
               <button matButton="tonal" class="cashback-btn">
                 <mat-icon>monetization_on</mat-icon> Cashback
               </button>
-              <h2 class="brand-name">{{ brand.nombreMarca }}</h2><br>
-              <p class="brand-desc">{{ brand["descripción"] }}</p>
+              <h2 class="brand-name">{{ brand.categoria["descripción"] }}</h2>
+              <h2 class="brand-name">{{ brand.brand.nombreMarca }}</h2>
+              <br />
+              <p class="brand-desc">{{ brand.brand["descripción"] }}</p>
             </mat-card-content>
           </mat-card>
         }
@@ -45,8 +47,8 @@
           mat-mini-fab
           color="primary"
           class="btn-arrows"
-          (click)="nextPage(list_Brands.menuItems.length)"
-          [disabled]="currentPage() >= getMaxPage(list_Brands.menuItems.length)"
+          (click)="nextPage(list_Brands.length)"
+          [disabled]="currentPage() >= getMaxPage(list_Brands.length)"
         >
           <mat-icon>keyboard_arrow_right</mat-icon>
         </button>

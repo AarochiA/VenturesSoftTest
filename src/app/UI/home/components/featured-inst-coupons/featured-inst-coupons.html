@@ -1,97 +1,139 @@
+<app-explore-inst-coupons
+  (idMenuOut)="getMarcasXIdMenu($event)"
+></app-explore-inst-coupons>
 <div @fadeIn>
-<div class="header-coupons">
-  <h1>Featured {{ 'INSTANT_COUPONS' | translate }} (1001)</h1>
+  <div class="header-coupons">
+    <h1>
+      {{ descCategoria() }} {{ "INSTANT_COUPONS" | translate }} ({{
+        idMenuFeatured()
+      }})
+    </h1>
 
-  <div class="header-right">
-    <mat-icon class="order-galeria" (click)="changeGalery();" [class.active]="flagMosaico()===false">
-      view_agenda
-    </mat-icon>
-    <mat-icon class="order-mosaico" (click)="changeMosaico();" [class.active]="flagMosaico()===true">
-      grid_view
-    </mat-icon>
+    <div class="header-right">
+      <mat-icon
+        class="order-galeria"
+        (click)="changeGalery()"
+        [class.active]="flagMosaico() === false"
+      >
+        view_agenda
+      </mat-icon>
+      <mat-icon
+        class="order-mosaico"
+        (click)="changeMosaico()"
+        [class.active]="flagMosaico() === true"
+      >
+        grid_view
+      </mat-icon>
 
-    <mat-form-field appearance="outline">
-      <mat-label>{{ 'SORT_BY' | translate }}</mat-label>
-      <mat-select (selectionChange)="onSortChange($event.value)" disableRipple>
-        <mat-option value="1">{{ 'UPWARD' | translate }}</mat-option>
-        <mat-option value="2">{{ 'FALLING' | translate }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-</div><br>
-@if(flagMosaico()){
-<div>
-  <div #divMosaico class="mosaico-container">
-    <div class="cards-container">
-      @if (brandsMosaico$ | async; as brandGroups) {
-      @for (group of brandGroups; track $index) {
-      <div class="card-group">
-        @for (brand of group; track $index) {
-        <mat-card class="brand-card">
-          <div class="image-container">
-            <img id="imagen_marca" [src]="brand.imagen" [alt]="brand.nombreMarca" />
-          </div>
-          <mat-card-content class="card-content">
-            <button matButton="tonal" class="cashback-btn">
-              <mat-icon>monetization_on</mat-icon> Instant Coupon
-            </button>
-            <h2 class="brand-name">{{ brand.nombreMarca }}</h2><br />
-            <p class="brand-desc">{{ brand["descripción"] }}</p><br />
-            <h2 class="get-coupon">Get Coupon &nbsp; &rarr;</h2>
-          </mat-card-content>
-        </mat-card>
-        }
-      </div>
-      }
-      }
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "SORT_BY" | translate }}</mat-label>
+        <mat-select
+          (selectionChange)="onSortChange($event.value)"
+          disableRipple
+        >
+          <mat-option value="1">{{ "UPWARD" | translate }}</mat-option>
+          <mat-option value="2">{{ "FALLING" | translate }}</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
-    <br />
-  @if(flagMoreCoupons()){
-  <div class="more-coupons-btn">
-    <button matButton="outlined" (click)="showAllCoupons();">
-      MORE INSTANT COUPONS &nbsp; &gt;
-    </button>
-  </div>
-  }@else {
-  <div class="more-coupons-btn">
-    <button matButton="outlined" (click)="showLessCoupons();">
-      LESS INSTANT COUPONS &nbsp; &gt;
-    </button>
-  </div>
-  }
-  </div>
-}
-
-@if(!flagMosaico()){
-<div #divGalery class="galery-container">
-  <div class="cards-row">
-   @if(brandsGalery$ | async; as brandpaginated){
-    @for (brand of paginatedCards; track brand.nombreMarca) {
-      <mat-card class="brand-card">
-        <div class="image-container">
-          <img id="imagen_marca" [src]="brand.imagen" [alt]="brand.nombreMarca" />
+  <br />
+  @if (flagMosaico()) {
+    <div>
+      <div #divMosaico class="mosaico-container">
+        <div class="cards-container">
+          @if (brandsMosaico$ | async; as brandGroups) {
+            @for (group of brandGroups; track $index) {
+              <div class="card-group">
+                @for (brand of group; track $index) {
+                  <mat-card class="brand-card">
+                    <div class="image-container">
+                      <img
+                        id="imagen_marca"
+                        [src]="brand.imagen"
+                        [alt]="brand.nombreMarca"
+                      />
+                    </div>
+                    <mat-card-content class="card-content">
+                      <button matButton="tonal" class="cashback-btn">
+                        <mat-icon>monetization_on</mat-icon> Instant Coupon
+                      </button>
+                      <h2 class="brand-name">{{ brand.nombreMarca }}</h2>
+                      <br />
+                      <p class="brand-desc">{{ brand["descripción"] }}</p>
+                      <br />
+                      <h2 class="get-coupon">Get Coupon &nbsp; &rarr;</h2>
+                    </mat-card-content>
+                  </mat-card>
+                }
+              </div>
+            }
+          }
         </div>
-        <mat-card-content class="card-content">
-          <button matButton="tonal" class="cashback-btn">
-            <mat-icon>monetization_on</mat-icon> Instant Coupon
+      </div>
+      <br />
+      @if (flagMoreCoupons()) {
+        <div class="more-coupons-btn">
+          <button matButton="outlined" (click)="showAllCoupons()">
+            {{ "MOREINSTANTCOUPONS" | translate }} &nbsp; &gt;
           </button>
-          <h2 class="brand-name">{{ brand.nombreMarca }}</h2><br />
-          <p class="brand-desc">{{ brand['descripción'] }}</p><br />
-          <h2 class="get-coupon">Get Coupon &nbsp; &rarr;</h2>
-        </mat-card-content>
-      </mat-card>
-    }
+        </div>
+      } @else {
+        <div class="more-coupons-btn">
+          <button matButton="outlined" (click)="showLessCoupons()">
+            {{ "LESSINSTANTCOUPONS" | translate }} &nbsp; &gt;
+          </button>
+        </div>
+      }
+    </div>
   }
-  </div>
 
-  <div class="pagination-buttons">
-    <button mat-button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
-    <span>Página {{ currentPage }} de {{ totalPages }}</span>
-    <button mat-button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
-  </div>
-</div>
-}
+  @if (!flagMosaico()) {
+    <div #divGalery class="galery-container">
+      <div class="cards-row">
+        @if (brandsGalery$ | async; as brandpaginated) {
+          @for (brand of paginatedCards; track brand.nombreMarca) {
+            <mat-card class="brand-card">
+              <div class="image-container">
+                <img
+                  id="imagen_marca"
+                  [src]="brand.imagen"
+                  [alt]="brand.nombreMarca"
+                />
+              </div>
+              <mat-card-content class="card-content">
+                <button matButton="tonal" class="cashback-btn">
+                  <mat-icon>monetization_on</mat-icon> Instant Coupon
+                </button>
+                <h2 class="brand-name">{{ brand.nombreMarca }}</h2>
+                <br />
+                <p class="brand-desc">{{ brand["descripción"] }}</p>
+                <br />
+                <h2 class="get-coupon">Get Coupon &nbsp; &rarr;</h2>
+              </mat-card-content>
+            </mat-card>
+          }
+        }
+      </div>
+
+      <div class="pagination-buttons">
+        <button mat-button (click)="prevPage()" [disabled]="currentPage === 1">
+          {{ "PREVIUS" | translate }}
+        </button>
+        <span
+          >{{ "PAGE" | translate }} {{ currentPage }} {{ "OF" | translate }}
+          {{ totalPages }}</span
+        >
+        <button
+          mat-button
+          (click)="nextPage()"
+          [disabled]="currentPage === totalPages"
+        >
+          {{ "NEXT" | translate }}
+        </button>
+      </div>
+    </div>
+  }
 </div>
 <br /><br />
 <br /><br />

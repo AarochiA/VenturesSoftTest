@@ -32,8 +32,4 @@ export class LinkYourCard {
     { nombre: 'MERCHANT_SEARCH' },
     { nombre: 'CASHBACK_OFFERS' },
   ];
-
-  guardarRespuestas() {
-    console.log('Respuestas:', this.items);
-  }
 }

@@ -17,5 +17,11 @@
   "SPANISH":"Español",
   "SORT_BY":"ORDERNAR",
   "UPWARD":"Ascendente",
-  "FALLING":"Descendente"
+  "FALLING":"Descendente",
+  "MOREINSTANTCOUPONS":"MAS CUPONES INSTANTANEOS",
+  "LESSINSTANTCOUPONS":"MENOS CUPONES INSTANTANEOS",
+  "PREVIUS":"Anterior",
+  "NEXT":"Siguiente",
+  "PAGE":"Página",
+  "OF":"de"
 }

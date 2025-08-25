@@ -1,19 +1,40 @@
-import { animate, keyframes, style, transition, trigger } from '@angular/animations';
-import { Component, inject, signal, ViewChild } from '@angular/core';
+import {
+  animate,
+  keyframes,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { Component, inject, input, signal, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { BrandsUseCases } from '../../../../domain/usecases/brandsApi-use-case';
-import { catchError, map, of } from 'rxjs';
+import { catchError, map, of, switchMap } from 'rxjs';
 import { BrandsModel, MenuItem } from '../../../../domain/models/brands.model';
 import { CommonModule } from '@angular/common';
-import { MatInputModule } from "@angular/material/input";
-import { MatSelect, MatSelectModule } from "@angular/material/select";
+import { MatInputModule } from '@angular/material/input';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { CategoriesUseCases } from '../../../../domain/usecases/categoriesApi-use-case';
+import {
+  CategoriesModel,
+  MenuItemCat,
+} from '../../../../domain/models/categories.model';
+import { ExploreInstCoupons } from '../explore-inst-coupons/explore-inst-coupons';
 
 @Component({
   selector: 'app-featured-inst-coupons',
-  imports: [MatButtonModule, TranslateModule, MatCardModule, MatIconModule, CommonModule, MatInputModule, MatSelectModule],
+  imports: [
+    MatButtonModule,
+    TranslateModule,
+    MatCardModule,
+    MatIconModule,
+    CommonModule,
+    MatInputModule,
+    MatSelectModule,
+    ExploreInstCoupons,
+  ],
   templateUrl: './featured-inst-coupons.html',
   styleUrl: './featured-inst-coupons.scss',
   animations: [
@@ -31,11 +52,12 @@ import { MatSelect, MatSelectModule } from "@angular/material/select";
   ],
 })
 export class FeaturedInstCoupons {
-
   @ViewChild(MatSelect) matSelect!: MatSelect;
 
   flagMoreCoupons = signal(true);
   flagMosaico = signal(true);
+  idMenuFeatured = signal('');
+  descCategoria = signal('');
 
   allBrands: MenuItem[] = [];
   paginatedCards: MenuItem[] = [];
@@ -45,33 +67,58 @@ export class FeaturedInstCoupons {
   totalPages: number = 1;
 
   private brandsUseCases = inject(BrandsUseCases);
+  private categoriesUseCases = inject(CategoriesUseCases);
 
-  brandsGalery$ = this.brandsUseCases.getListBrands('1001').pipe(
-    map((response) => {
-      const list_Resp_Marcas = response as BrandsModel;
-      this.allBrands = list_Resp_Marcas.menuItems;
-      this.totalPages = Math.ceil(this.allBrands.length / this.pageSize);
-      this.updatePaginatedCards();
-      return list_Resp_Marcas.menuItems;
-    }),
+  categories$ = this.categoriesUseCases.getListCategories().pipe(
+    map((response) => response.menuItems as MenuItemCat[]),
     catchError((error) => {
-      console.error('Error cargando lista de marcas: ', error);
-      this.allBrands = [];
-      this.paginatedCards = [];
-      return of([]);
+      console.error('Error cargando lista de categorías: ', error);
+      return of([] as MenuItemCat[]);
     }),
   );
 
-  brandsMosaico$ = this.brandsUseCases.getListBrands('1001').pipe(
-    map((response) => {
-      const list_Resp_Marcas = response as BrandsModel;
-      const limitedItems = list_Resp_Marcas.menuItems.slice(0, 8);
-      this.allBrands = list_Resp_Marcas.menuItems;
-      return this.chunkArray(limitedItems, 4);
+  brandsGalery$ = this.categories$.pipe(
+    switchMap((categories) => {
+      if (!categories || categories.length === 0) return of([]);
+      const firstId = categories[0].idMenu.toString();
+      this.idMenuFeatured.set(firstId);
+      this.descCategoria.set(categories[0].descripción);
+      return this.brandsUseCases.getListBrands(firstId).pipe(
+        map((response) => {
+          const list_Resp_Marcas = response as BrandsModel;
+          this.allBrands = list_Resp_Marcas.menuItems;
+          this.totalPages = Math.ceil(this.allBrands.length / this.pageSize);
+          this.updatePaginatedCards();
+          return list_Resp_Marcas.menuItems;
+        }),
+        catchError((error) => {
+          console.error('Error cargando lista de marcas: ', error);
+          this.allBrands = [];
+          this.paginatedCards = [];
+          return of([]);
+        }),
+      );
     }),
-    catchError((error) => {
-      console.error('Error cargando lista de marcas: ', error);
-      return of([] as MenuItem[][]);
+  );
+
+  brandsMosaico$ = this.categories$.pipe(
+    switchMap((categories) => {
+      if (!categories || categories.length === 0) return of([] as MenuItem[][]);
+      const firstId = categories[0].idMenu.toString();
+      this.idMenuFeatured.set(firstId);
+      this.descCategoria.set(categories[0].descripción);
+      return this.brandsUseCases.getListBrands(firstId).pipe(
+        map((response) => {
+          const list_Resp_Marcas = response as BrandsModel;
+          const limitedItems = list_Resp_Marcas.menuItems.slice(0, 8);
+          this.allBrands = list_Resp_Marcas.menuItems;
+          return this.chunkArray(limitedItems, 4);
+        }),
+        catchError((error) => {
+          console.error('Error cargando lista de marcas: ', error);
+          return of([] as MenuItem[][]);
+        }),
+      );
     }),
   );
 
@@ -84,33 +131,37 @@ export class FeaturedInstCoupons {
   }
 
   showAllCoupons = () => {
-    this.brandsMosaico$ = this.brandsUseCases.getListBrands('1001').pipe(
-      map((response) => {
-        const list_Resp_Marcas = response as BrandsModel;
-        return this.chunkArray(list_Resp_Marcas.menuItems, 4);
-      }),
-      catchError((error) => {
-        console.error('Error cargando lista de marcas: ', error);
-        return of([] as MenuItem[][]);
-      }),
-    );
+    this.brandsMosaico$ = this.brandsUseCases
+      .getListBrands(this.idMenuFeatured())
+      .pipe(
+        map((response) => {
+          const list_Resp_Marcas = response as BrandsModel;
+          return this.chunkArray(list_Resp_Marcas.menuItems, 4);
+        }),
+        catchError((error) => {
+          console.error('Error cargando lista de marcas: ', error);
+          return of([] as MenuItem[][]);
+        }),
+      );
     this.flagMoreCoupons.set(false);
-  }
+  };
 
   showLessCoupons = () => {
-    this.brandsMosaico$ = this.brandsUseCases.getListBrands('1001').pipe(
-      map((response) => {
-        const list_Resp_Marcas = response as BrandsModel;
-        const limitedItems = list_Resp_Marcas.menuItems.slice(0, 8);
-        return this.chunkArray(limitedItems, 4);
-      }),
-      catchError((error) => {
-        console.error('Error cargando lista de marcas: ', error);
-        return of([] as MenuItem[][]);
-      }),
-    );
+    this.brandsMosaico$ = this.brandsUseCases
+      .getListBrands(this.idMenuFeatured())
+      .pipe(
+        map((response) => {
+          const list_Resp_Marcas = response as BrandsModel;
+          const limitedItems = list_Resp_Marcas.menuItems.slice(0, 8);
+          return this.chunkArray(limitedItems, 4);
+        }),
+        catchError((error) => {
+          console.error('Error cargando lista de marcas: ', error);
+          return of([] as MenuItem[][]);
+        }),
+      );
     this.flagMoreCoupons.set(true);
-  }
+  };
 
   changeGalery() {
     this.flagMosaico.set(false);
@@ -176,4 +227,42 @@ export class FeaturedInstCoupons {
     }
   }
 
+  getMarcasXIdMenu(event: { idMenu: string; descCat: string }) {
+    this.idMenuFeatured.set(event.idMenu);
+    this.descCategoria.set(event.descCat);
+    this.currentPage = 1;
+
+    this.brandsGalery$ = this.brandsUseCases
+      .getListBrands(this.idMenuFeatured())
+      .pipe(
+        map((response) => {
+          const list_Resp_Marcas = response as BrandsModel;
+          this.allBrands = list_Resp_Marcas.menuItems;
+          this.totalPages = Math.ceil(this.allBrands.length / this.pageSize);
+          this.updatePaginatedCards();
+          return list_Resp_Marcas.menuItems;
+        }),
+        catchError((error) => {
+          console.error('Error cargando lista de marcas: ', error);
+          this.allBrands = [];
+          this.paginatedCards = [];
+          return of([]);
+        }),
+      );
+
+    this.brandsMosaico$ = this.brandsUseCases
+      .getListBrands(this.idMenuFeatured())
+      .pipe(
+        map((response) => {
+          const list_Resp_Marcas = response as BrandsModel;
+          const limitedItems = list_Resp_Marcas.menuItems.slice(0, 8);
+          this.allBrands = list_Resp_Marcas.menuItems;
+          return this.chunkArray(limitedItems, 4);
+        }),
+        catchError((error) => {
+          console.error('Error cargando lista de marcas: ', error);
+          return of([] as MenuItem[][]);
+        }),
+      );
+  }
 }
