@@ -14,5 +14,8 @@
   "NOCARDREQUIRED":"No es requerido vincular la tarjeta",
   "LINKYOURCARDTOGET":"Vincula tu tarjeta para obtener",
   "ENGLISH":"Ingles",
-  "SPANISH":"Español"
+  "SPANISH":"Español",
+  "SORT_BY":"ORDERNAR",
+  "UPWARD":"Ascendente",
+  "FALLING":"Descendente"
 }

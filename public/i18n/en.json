@@ -14,5 +14,8 @@
   "NOCARDREQUIRED":"No card linking required",
   "LINKYOURCARDTOGET":"Link your card to get",
   "ENGLISH":"English",
-  "SPANISH":"Spanish"
+  "SPANISH":"Spanish",
+  "SORT_BY":"SORT BY",
+  "UPWARD":"Upward",
+  "FALLING":"Falling"
 }
