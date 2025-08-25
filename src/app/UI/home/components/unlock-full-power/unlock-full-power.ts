@@ -16,6 +16,7 @@ import { BrandsUseCases } from '../../../../domain/usecases/brandsApi-use-case';
 import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
 import { CategoriesUseCases } from '../../../../domain/usecases/categoriesApi-use-case';
 import { MenuItemCat } from '../../../../domain/models/categories.model';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-unlock-full-power',
@@ -48,6 +49,31 @@ export class UnlockFullPower {
 
   private brandsUseCases = inject(BrandsUseCases);
   private categoriesUseCases = inject(CategoriesUseCases);
+  private breakpointObserver = inject(BreakpointObserver);
+
+  constructor() {
+    this.breakpointObserver
+      .observe([
+        Breakpoints.XSmall,
+        Breakpoints.Small,
+        Breakpoints.Medium,
+        Breakpoints.Large,
+        Breakpoints.XLarge,
+      ])
+      .subscribe((result) => {
+        if (result.breakpoints[Breakpoints.XSmall]) {
+          this.itemsPerPage = 1;
+        } else if (result.breakpoints[Breakpoints.Small]) {
+          this.itemsPerPage = 2;
+        } else if (result.breakpoints[Breakpoints.Medium]) {
+          this.itemsPerPage = 3;
+        } else if (result.breakpoints[Breakpoints.Large]) {
+          this.itemsPerPage = 4;
+        } else if (result.breakpoints[Breakpoints.XLarge]) {
+          this.itemsPerPage = 6;
+        }
+      });
+  }
 
   categories$ = this.categoriesUseCases.getListCategories().pipe(
     map((response) => response.menuItems as MenuItemCat[]),
